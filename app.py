@@ -72,11 +72,12 @@ monthname = [None,
              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 
-def log_message(format, *args):
+def log_message(msgfmt, *args):
         sys.stderr.write("%s - - [%s] %s\n" %
                          ('127.0.0.1',
                           log_date_time_string(),
-                          format%args))
+                          msgfmt % args))
+
 
 def getstringpath():
     return os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -603,7 +604,7 @@ def main():
     VMRUN = config[platform]['VMRUN']
     VMTYPE = config[platform]['VMTYPE']
 
-    log_message('%s %s', 'DEFAULT_VM_PATH = ' , DEFAULT_VM_PATH)
+    log_message('%s %s', 'DEFAULT_VM_PATH = ', DEFAULT_VM_PATH)
     log_message('%s %s', 'DEFAULT_PARENT_VM_PATH = ', DEFAULT_PARENT_VM_PATH)
     log_message('%s %s', 'DEFAULT_LOG_PATH = ', DEFAULT_LOG_PATH)
     log_message('%s %s', 'PORT  = ', PORT)
@@ -660,7 +661,7 @@ def main():
 
     # Start development server on all IPs and using configured port
     try:
-        run(host='127.0.0.1', port=PORT, debug=True)
+        run(host='0.0.0.0', port=PORT, debug=True)
     finally:
         with open('vmInventory', 'w') as f:
             json.dump(names, f)
