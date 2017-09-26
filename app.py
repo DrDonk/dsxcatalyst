@@ -565,7 +565,7 @@ def main():
     # TODO: Implement a class for the main application to remove globals
 
     log_message('%s', 'Hello from DSXCatalyst!')
-    log_message('%s', '(c) Dave Parsons 2016')
+    log_message('%s', '(c) David Parsons 2016-17')
 
     # Get the underlying OS for configuration data
     global platform
@@ -613,6 +613,12 @@ def main():
     # Get the VMs from the inventory
     global names
     global vms
+
+    for root, dirs, files in os.walk("/Users/i049299/Documents/AppCatalyst"):
+        for file in files:
+            if file.lower().endswith(".vmx"):
+                print(os.path.join(root, file))
+                # names[dirs] = file
 
     # Read or create the vmInventory file
     if isfile('vmInventory'):
