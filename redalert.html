@@ -1,0 +1,156 @@
+<!--
+    This is a recreation of the Star Trek II (Wrath of Khan) red alert, using HTML and CSS3.
+    It will only work on browers that support CSS3 animations (so will not currently work on IE).
+    If you wish to alter the size then, providing you keep the aspect ratio the same, you should
+    only need to adjust the font sizes.  Everything else should scale correctly.
+
+    NOTE: The font is not entirely accurate but was the closest free font I could find. Also
+    Webkit browsers do not correctly crop the left and right edges, so they incorrectly appear
+    straight instead of curved.  Firefox does not have this problem.  However I have found the
+    animations are far smoother in Webkit browsers than in Firefox.
+
+    Live long and prosper CSS3!  John Williams 2012
+-->
+
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Star Trek 2 Red Alert</title>
+        <meta charset="utf-8">
+        <meta name="description" content="Star Trek 2 Red Alert by John Williams 2012">
+        <meta name="keywords" content="red alert,star trek,wrath of khan">
+        <link href='http://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
+        <style>
+            body{margin:0;padding:0;background-color:black;}
+            #redAlert {font-family:orbitron;color:#BF0019;background-color:black;position:absolute;width:100%;height:100%;display:table}
+            #redAlert .centreContent {display:table-cell;text-align:center;vertical-align: middle}
+            #redAlert .centredContent {display:inline-block;width:800px;height:680px}
+            #redAlert .outerMask{width:800px;height:680px;overflow:hidden;position: absolute;}
+            #redAlert .curvedEdges{height:110%;top: -5%;overflow:hidden;background-color:#BF0019;position:absolute;width: 100% ;-moz-border-radius: 50%;-webkit-border-radius: 50%; border-radius:50%}
+            #redAlert .innerContent{    height: 91%;position: absolute;top: 4.5%;width: 100%;}
+
+            #redAlert .messageBanner {height: 24%;padding:4% 0;width:100%;position: absolute;top: 33%;background-color:black;}
+            #redAlert .messageBanner .message{display:inline-block;text-align: center;vertical-align: middle;width: 66%;}
+            #redAlert .messageBanner .message .large{font-size: 108px;font-weight: bold}
+            #redAlert .messageBanner .message .small{font-size: 43px;letter-spacing: 0.11em;}
+            #redAlert .messageBanner .block{width:17%;height:100%;display:inline-block;vertical-align: middle;background-color:#DA001D;-moz-border-radius: 9px;-webkit-border-radius: 9px; border-radius:9px}
+
+            #redAlert .topBars,#redAlert .bottomBars {overflow:hidden;position:absolute;width:44%;left:28%;height:30%;overflow: hidden;background-color:black;}
+            #redAlert .topBars {-moz-border-radius:0 0 6% 6%;-webkit-border-radius: 0 0 6% 6%; border-radius:0 0 6% 6%}
+            #redAlert .bottomBars {bottom:-1px;-moz-border-radius: 6% 6% 0 0;-webkit-border-radius: 6% 6% 0 0; border-radius:6% 6% 0 0}
+            #redAlert .bars div {box-shadow:0 20px 50px #FF5E01;margin:1%;height:19%;background-color:#DA001D;-moz-border-radius: 20px 20px 20px 20px;-webkit-border-radius: 20px 20px 20px 20px; border-radius:20px 20px 20px 20px;}
+            #redAlert .bottomBars .bars div {box-shadow: 0 -20px 50px #FF5E01}
+            #redAlert .bars{height:30%;}
+            #redAlert  .bright { background-color: #FF2200 !important;}
+            #redAlert .topBars .bars {box-shadow:0 -30px 60px #FF0022}
+            #redAlert .bottomBars .bars {box-shadow:0 30px 60px #FF0022}
+
+            #redAlert .leftBlackBlock, #redAlert .rightBlackBlock { background-color: black;position:absolute;width:88%;height:88%;-moz-transform:rotate(45deg);-webkit-transform:rotate(45deg);-o-transform:rotate(45deg);transform:rotate(45deg);}
+            #redAlert .leftBlackBlock { margin-left:-62%;}
+            #redAlert .rightBlackBlock { margin:10% 0 0 75%;}
+
+            #redAlert .messageBanner {
+                animation-name: text;
+                animation-duration: 1.1s;
+                animation-timing-function: linear;
+                animation-iteration-count: infinite;
+                animation-play-state: running;
+                -moz-animation-name: text;
+                -moz-animation-duration: 1.1s;
+                -moz-animation-timing-function: linear;
+                -moz-animation-iteration-count: infinite;
+                -moz-animation-play-state: running;
+                -webkit-animation-name: text;
+                -webkit-animation-duration: 1.1s;
+                -webkit-animation-timing-function: linear;
+                -webkit-animation-iteration-count: infinite;
+                -webkit-animation-play-state: running;
+            }
+            #redAlert .topBars .bars
+            {
+                animation-name: topBars;
+                animation-duration: 1.1s;
+                animation-timing-function: linear;
+                animation-iteration-count: infinite;
+                animation-play-state: running;
+                -moz-animation-name: topBars;
+                -moz-animation-duration: 1.1s;
+                -moz-animation-timing-function: linear;
+                -moz-animation-iteration-count: infinite;
+                -moz-animation-play-state: running;
+                -webkit-animation-name: topBars;
+                -webkit-animation-duration: 1.1s;
+                -webkit-animation-timing-function: linear;
+                -webkit-animation-iteration-count: infinite;
+                -webkit-animation-play-state: running;
+            }
+            #redAlert .bottomBars .bars
+            {
+                animation-name: bottomBars;
+                animation-duration: 1.1s;
+                animation-timing-function: linear;
+                animation-iteration-count: infinite;
+                animation-play-state: running;
+                -moz-animation-name: bottomBars;
+                -moz-animation-duration: 1.1s;
+                -moz-animation-timing-function: linear;
+                -moz-animation-iteration-count: infinite;
+                -moz-animation-play-state: running;
+                -webkit-animation-name: bottomBars;
+                -webkit-animation-duration: 1.1s;
+                -webkit-animation-timing-function: linear;
+                -webkit-animation-iteration-count: infinite;
+                -webkit-animation-play-state: running;
+            }
+
+            @keyframes topBars { 0% {margin-top:-35%} 100% {margin-top:80%;} }
+            @keyframes bottomBars { 0% {margin-top:70%} 100% {margin-top:-45%;} }
+            @keyframes text { 55% {color:inherit;text-shadow:none;background-color:black;box-shadow: none} 65% {color:#FF2200;text-shadow:0 0 30px red;background-color:#450000;box-shadow: 0 0 80px darkred;} 82% {color:#FF2200;text-shadow:0 0 30px red;background-color:#450000;box-shadow: 0 0 80px darkred;}  }
+            @-moz-keyframes topBars { 0% {margin-top:-35%} 100% {margin-top:80%;} }
+            @-moz-keyframes bottomBars { 0% {margin-top:75%} 100% {margin-top:-45%;} }
+            @-moz-keyframes text { 55% {color:inherit;text-shadow:none;background-color:black;box-shadow: none} 65% {color:#FF2200;text-shadow:0 0 30px red;background-color:#450000;box-shadow: 0 0 80px darkred;} 82% {color:#FF2200;text-shadow:0 0 30px red;background-color:#450000;box-shadow: 0 0 80px darkred;}  }
+            @-webkit-keyframes topBars { 0% {margin-top:-35%} 100% {margin-top:80%;} }
+            @-webkit-keyframes bottomBars { 0% {margin-top:75%} 100% {margin-top:-45%;} }
+            @-webkit-keyframes text { 55% {color:inherit;text-shadow:none;background-color:black;box-shadow: none} 65% {color:#FF2200;text-shadow:0 0 30px red;background-color:#450000;box-shadow: 0 0 80px darkred;} 82% {color:#FF2200;text-shadow:0 0 30px red;background-color:#450000;box-shadow: 0 0 80px darkred;}  }
+        </style>
+    </head>
+
+    <body>
+        <div id="redAlert">
+            <div class="centreContent">
+                <div class="centredContent">
+                    <div class="outerMask">
+                        <div class="curvedEdges">
+                            <div class="innerContent">
+                                <div class="leftBlackBlock"></div><div class="rightBlackBlock"></div>
+
+                                <div class="topBars">
+                                    <div class="bars">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div class="bright"></div>
+                                    </div>
+                                </div>
+                                <div class="bottomBars">
+                                    <div class="bars">
+                                        <div class="bright"></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
+                                </div>
+
+                                <div class="messageBanner">
+                                    <div class="block"></div><div class="message"><div class='large'>ALERT</div><div class='small'>CONDITION:&nbsp;RED</div></div><div class="block"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

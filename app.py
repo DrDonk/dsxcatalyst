@@ -23,14 +23,17 @@ THE SOFTWARE.
 """
 
 from __future__ import print_function
+
 import json
 import os
 import shutil
 import subprocess
 import sys
 import time
-from bottle import run, get, delete, post, patch, request, response, static_file, error
+
 from configobj import ConfigObj
+
+from bottle import run, get, delete, post, patch, request, response, static_file, error
 from pyvmxdict import VMDict
 
 __author__ = 'Dave Parsons'
@@ -49,7 +52,6 @@ DEFAULT_LOG_PATH = ''
 PORT = ''
 VMRUN = ''
 VMTYPE = ''
-
 
 if sys.version_info < (2, 7):
     sys.stderr.write('You need Python 2.7 or later\n')
@@ -73,10 +75,10 @@ monthname = [None,
 
 
 def log_message(msgfmt, *args):
-        sys.stderr.write("%s - - [%s] %s\n" %
-                         ('127.0.0.1',
-                          log_date_time_string(),
-                          msgfmt % args))
+    sys.stderr.write("%s - - [%s] %s\n" %
+                     ('127.0.0.1',
+                      log_date_time_string(),
+                      msgfmt % args))
 
 
 def getstringpath():
@@ -96,7 +98,6 @@ def joinpath(folder, filename):
 
 
 def runcmd(cmd, strip=True):
-
     # vmrun does not return any exit codes and all errors are in stdout!
     command = VMRUN + VMTYPE + cmd
     log_message('%s %s', 'VMRUN Command: ', command)
@@ -130,7 +131,6 @@ def symlink(src, dest):
 
 @get('/api')
 def api():
-
     # TODO: Return configuration via JSON
     # Return the API version
 
@@ -139,7 +139,6 @@ def api():
 
 @get('/api/config')
 def api():
-
     # TODO: Return configuration via HTML template
     # Return the config details (appcatalyst.conf)
     # DEFAULT_VM_PATH
@@ -153,7 +152,6 @@ def api():
 
 @get('/api/vms')
 def get_vms():
-
     # Return the names dict keys in non-JSON text form:
     # ["photon1", "photons2", ...]
     # Ignore the "tags" parameters as not used in AppCatalyst previews
@@ -169,7 +167,6 @@ def get_vms():
 
 @post('/api/vms')
 def post_vms():
-
     # Create a new cloned VM from default or specified source
     body = json.load(request.body)
     destvmx = ''
@@ -236,7 +233,6 @@ def post_vms():
 
 @get('/api/vms/<vmid>')
 def get_vms_id(vmid):
-
     # Check id is valid
     output = ''
     if vms:
@@ -255,7 +251,6 @@ def get_vms_id(vmid):
 
 @delete('/api/vms/<vmid>')
 def del_vms_id(vmid):
-
     # Delete the VM from inventory
     # code, output = runcmd('stop ' + names[vmid] + ' hard')
     code, output = runcmd('deleteVM ' + names[vmid])
@@ -287,7 +282,6 @@ def del_vms_id(vmid):
 
 @get('/api/vms/power/<vmid>')
 def get_vms_power_id(vmid):
-
     # List the running VMs and see if id is one of them
     code, message = runcmd('list')
     if code == 200:
@@ -308,7 +302,6 @@ def get_vms_power_id(vmid):
 
 @patch('/api/vms/power/<vmid>')
 def patch_vms_power_id(vmid):
-
     # Power operations for the VM
     body = request.body.read()
     powerop = ''
@@ -341,8 +334,10 @@ def patch_vms_power_id(vmid):
         body = '{"code": 500, "message": "The op name is not supported."}'
 
     # Run the command
-    code, output = runcmd(powerop + ' ' + names[vmid] + ' ' + powersubop)
-
+    try:
+        code, output = runcmd(powerop + ' ' + names[vmid] + ' ' + powersubop)
+    except Exception as e:
+        pass
     # Check response code from the vmrun procedure & return to caller
     if code == 200:
         response.body = body
@@ -390,7 +385,6 @@ def get_vms_folders_id(vmid):
 
 @patch('/api/vms/<vmid>/folders')
 def patch_vms_id_folders(vmid):
-
     # Toggle shared folders on/off
     body = request.body.read()
     folderop = ''
@@ -484,7 +478,7 @@ def patch_vms_id_folders_id(vmid, folderid):
 
         # Check response code from the vmrun procedure & return to caller
         if code == 200:
-            response.body = '{"guestPath": "' + body['guestPath'] + '", "hostPath": "'\
+            response.body = '{"guestPath": "' + body['guestPath'] + '", "hostPath": "' \
                             + body['hostPath'] + '", "flags": 4}'
         elif code == 500:
             response.body = '{"code": 500, "message": ' + folderid + ' ' + output + '"}'
@@ -521,7 +515,6 @@ def delete_vms_id_folders_id(vmid, folderid):
 
 @get('/api/vms/<vmid>/ipaddress')
 def get_vms_getipaddress(vmid):
-
     # Run the command
     code, output = runcmd('getGuestIPAddress ' + names[vmid] + ' -wait')
 
@@ -560,7 +553,6 @@ def error500():
 
 
 def main():
-
     # TODO: Much of this is not Pythonic and will need more work
     # TODO: Implement a class for the main application to remove globals
 
@@ -614,11 +606,10 @@ def main():
     global names
     global vms
 
-    for root, dirs, files in os.walk("/Users/i049299/Documents/AppCatalyst"):
-        for file in files:
-            if file.lower().endswith(".vmx"):
-                print(os.path.join(root, file))
-                # names[dirs] = file
+    # for root, dirs, files in os.walk(DEFAULT_VM_PATH):
+    #     for file in files:
+    #         if file.lower().endswith(".vmx"):
+    #             print(os.path.join(root, file))
 
     # Read or create the vmInventory file
     if isfile('vmInventory'):
